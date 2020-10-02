@@ -1,0 +1,96 @@
+<processing-indicator *ngIf="isProcessing"></processing-indicator>
+<ng-container *ngIf="items">
+  <table mat-table [dataSource]="items" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="prescriber">
+      <th mat-header-cell *matHeaderCellDef>Prescriber Name</th>
+      <td mat-cell class="pointer" *matCellDef="let item" [class.deleted]="item.isDeleted"
+        [class.processing]="item.isProcessing">
+        {{item.agent?.profile?.firstName}} {{item.agent?.profile?.lastName}}
+        <br><small>{{item.organization?.name}}</small>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="patient">
+      <th mat-header-cell *matHeaderCellDef>Number of Patients</th>
+      <td mat-cell class="pointer" *matCellDef="let item" [class.deleted]="item.isDeleted"
+        [class.processing]="item.isProcessing">
+        <ng-container *ngIf="item.visitors && item.visitors.length">
+          {{item.visitors.length}}
+        </ng-container>
+        <ng-container *ngIf="!item.visitors || !item.visitors.length">
+          0
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="topic">
+      <th mat-header-cell *matHeaderCellDef>Topic</th>
+      <td class="pointer" mat-cell *matCellDef="let item" [class.deleted]="item.isDeleted"
+        [class.processing]="item.isProcessing">
+        <span matTooltip="{{item.purpose}}" style="display: inline-block;
+        white-space: nowrap;
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+        width: 300px;">{{item.purpose}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef>Appointment Date/Time</th>
+      <td class="pointer" mat-cell *matCellDef="let item" [class.deleted]="item.isDeleted"
+        [class.processing]="item.isProcessing">
+        {{item.from | date: 'MM/dd/yyyy'}} - From : {{item.from | date: 'h:mm a'}} To : {{item.till | date: 'h:mm a'}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="zoomId">
+      <th mat-header-cell *matHeaderCellDef>Zoom</th>
+      <td class="pointer" mat-cell *matCellDef="let item" [class.deleted]="item.isDeleted"
+        [class.processing]="item.isProcessing">
+        <ng-container *ngIf="item.meta">
+          Id - <span matTooltip="Click to copy in clipboard"
+            (click)="copyItemValue(item.meta.id)">{{item.meta.id}}</span>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>
+      </th>
+      <td mat-cell class="left text-center" *matCellDef="let item">
+        <button mat-icon-button [disabled]="item.isProcessing" matTooltip="Edit" (click)="select(item)">
+          <mat-icon class="colorCustom">edit</mat-icon>
+        </button>
+        <button mat-icon-button [disabled]="item.isProcessing" matTooltip="View" (click)="viewItem(item)">
+          <mat-icon class="colorCustom">remove_red_eye</mat-icon>
+        </button>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="remove(item)">
+            <span>Delete</span>
+          </button>
+          <button mat-menu-item (click)="markVisited(item)">
+            <span>Visited</span>
+          </button>
+          <button mat-menu-item (click)="download(item)">
+            <span>Download</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+  </table>
+
+  <div *ngIf="items.length" class="paging">
+    <app-paginator [pager]="pager" [total]="pager.total"></app-paginator>
+  </div>
+
+  <a #alink target="_blank" class="hidden"></a>
+
+</ng-container>
