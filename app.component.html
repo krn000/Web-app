@@ -1,0 +1,20 @@
+<div *ngIf="!isLoading">
+  <mat-sidenav-container class="nav-container" *ngIf="currentRole">
+    <mat-sidenav class="menu" #sidenav [mode]="sideNavMode" [opened]="sideNavOpened">
+      <app-side-nav></app-side-nav>
+    </mat-sidenav>
+    <app-side-bar>
+      <div class="body" [class.full-width]="sideNavMode === 'over'">
+        <app-header></app-header>
+        <!-- <app-context-bar></app-context-bar> -->
+        <router-outlet></router-outlet>
+        <div *ngIf="envName" class="env">{{envName}}</div>
+      </div>
+    </app-side-bar>
+  </mat-sidenav-container>
+  <div *ngIf="!currentRole">
+    <router-outlet></router-outlet>
+    <div *ngIf="envName" class="env">{{envName}}</div>
+  </div>
+</div>
+<processing-indicator *ngIf="isLoading"></processing-indicator>

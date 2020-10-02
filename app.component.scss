@@ -1,0 +1,45 @@
+.body {
+  height: 100vh;
+  // width: calc(100vw - 200px);
+  width: 100%;
+  background: var(--defaultBackground);
+  overflow-y: scroll;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 55px;
+}
+
+.body.full-width {
+  width: 100vw;
+}
+
+.env {
+  position: fixed;
+  top: 90vh;
+  background: black;
+  color: #fff;
+  padding: 5px;
+  border-radius: 10px 0 0 10px;
+  right: 0;
+}
+
+.nav-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+mat-sidenav.menu {
+  width: 60px;
+  box-shadow: 0 0 10px #00000012;
+}
+
+@media only screen and (max-width: 800px) {
+  .body {
+    padding-left: 5px;
+    padding-right: 5px;
+    // width: calc(100vw);
+  }
+}
